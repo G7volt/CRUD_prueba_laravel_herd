@@ -9,16 +9,28 @@ class PostController extends Controller
 {
     public function index(){
         $posts = Post::all();
-        return $posts;
-        return view('posts.index');
+        return view('posts.index', compact('posts'));
     }
 
     public function create(){
         return view('posts.create');
     }
 
+    //Funcion para almacenar los datos enviados desde el formulario, guarda los datos proporcionados y los guarda en la base de datos.
+    public function store(Request $request){
+        $post = new Post();
+
+        $post -> title = $request -> title;
+        $post -> category = $request -> category;
+        $post -> content = $request -> content;
+
+        $post -> save();
+
+        return redirect('/posts');
+    }
+
     public function show($post){
-        return view('posts.show', compact('post')
-        );
+        $post = new Post();
+        return view('posts.show', compact('post'));
     }
 }
