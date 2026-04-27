@@ -1,5 +1,5 @@
 <x-app-layout>
-    <h1 class="text-center">Aca se mostraran todos los posts</h1>
+    <h1 >Aca se mostraran todos los posts</h1>
 
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         <a href="/posts/create" style="color: white">
@@ -20,10 +20,10 @@
             <tbody>
                 @foreach($posts as $post)
                 <tr>
-                <th href="/posts/{{$post->id}}">{{$post -> id}}</th>
-                <td href="/posts/{{$post->id}}">{{$post -> title}}</td>
-                <td href="/posts/{{$post->id}}">{{$post -> category}}</td>
-                <td href="/posts/{{$post->id}}">{{$post -> published_at}}</td>
+                <th >{{$post -> id}}</th>
+                <td >{{$post -> title}}</td>
+                <td >{{$post -> category}}</td>
+                <td >{{$post -> published_at}}</td>
                 <td><a href="/posts/{{$post->id}}">ver post</a></td>
                 </tr>
                 @endforeach
