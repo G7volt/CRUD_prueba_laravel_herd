@@ -5,13 +5,13 @@
 
     <h1 >Aca se mostraran todos los posts</h1>
 
-     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+     <button type="button" class="btn btn-primary">
         <a href="/" style="color: white">
             Volver
         </a>
     </button>
 
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <button type="button" class="btn btn-primary" >
         <a href="/posts/create" style="color: white">
             Nuevo Post
         </a>
