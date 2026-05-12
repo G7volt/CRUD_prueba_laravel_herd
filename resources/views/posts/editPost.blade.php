@@ -9,17 +9,22 @@
 
     <h1 class="text-center">formulario para editar un Post</h1>
 
-    <form action="/posts" method="POST">
+    <form action="/posts/{{$post->id}}" method="POST">
+
         @csrf
+
+        <!--Para indicarle al form que esta ocupando un metodo PUT(Actualizar)-->
+        @method('PUT')
+
         <label>
-            Titulo:
-            <input type="text" name="title" id="title" value={{$post->title}}>
+            Titulo:  
+            <input type="text" name="title" value="{{$post->title}}">
         </label>
                 <br>
                 <br>
         <label>
             Categoria:
-            <input type="text" name="category" id="category" value={{$post->category}}>
+            <input type="text" name="category" id="category" value="{{$post->category}}">
         </label>
                 <br>
                 <br>
@@ -32,7 +37,7 @@
         <br>
         <br>
         <button type="submit button" class="btn btn-primary">
-            Editar Post
+            Actualizar Post
         </button>
         
     </form> 

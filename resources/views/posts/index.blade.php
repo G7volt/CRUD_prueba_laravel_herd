@@ -20,7 +20,6 @@
     <table class="table table-border">
             <thead>
                 <tr>
-                <th scope="col">id</th>
                 <th scope="col">Titulo</th>
                 <th scope="col">categoria</th>
                 <th scope="col">Fecha y Hora de Creacion</th>
@@ -29,14 +28,18 @@
             <tbody>
                 @foreach($posts as $post)
                 <tr>
-                <th href="/posts/{{$post->id}}">{{$post -> id}}</th>
                 <td><a href="/posts/{{$post->id}}">{{$post -> title}}</a></td>
                 <td href="/posts/{{$post->id}}">{{$post -> category}}</td>
                 <td href="/posts/{{$post->id}}">{{$post -> created_at}}</td>
                 </tr>
                 @endforeach
             </tbody>
-        </table>
+    </table>
 
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {{$posts->links()}}
+        </ul>
+    </nav>
 
 </x-app-layout>

@@ -12,7 +12,8 @@ Route::get('/posts/create', [PostController::class, 'create']);
 Route::get('/posts/{post}', [PostController::class, 'show']);
 Route::post('/posts', [PostController::class, 'store']);
 Route::get('/posts/{post}/editPost', [PostController::class, 'edit']);
-Route::post('/posts/{post}', [PostController::class, 'update']);
+Route::put('/posts/{post}', [PostController::class, 'update']);
+Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 
 /*Route::get('/posts/{post}/{category?}', function($post, $category = null) {
     
@@ -90,6 +91,6 @@ Route::get('prueba', function () {
     */
 
     $post = Post::find(1);
-
+ 
     dd($post->is_active);
 });
