@@ -17,7 +17,7 @@
                                 <a class="nav-link" href="">Estudios y habilidades</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="">Tabla Imagenes</a>
+                                <a class="nav-link" href="/Image_Table">Tabla Imagenes</a>
                             </li>   
                             <li class = "nav-item">
                             <a class="nav-link" href ="/posts"> Lista de posts </a>

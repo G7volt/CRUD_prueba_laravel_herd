@@ -1,8 +1,5 @@
 <x-app-layout>
     
-    <x-navbar></x-navbar>
-    
-
 <div class="container">
     
     <x-presentacion></x-presentacion>

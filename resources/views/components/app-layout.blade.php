@@ -8,7 +8,10 @@
 </head>
 <body>
 
-    <header></header>
+    <header>
+        <x-navbar>
+        </x-navbar>
+    </header>
 
     <main>
         {{ $slot }}

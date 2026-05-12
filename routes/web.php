@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PostController;
 use App\Models\Post;
 
@@ -14,6 +15,18 @@ Route::post('/posts', [PostController::class, 'store']);
 Route::get('/posts/{post}/editPost', [PostController::class, 'edit']);
 Route::put('/posts/{post}', [PostController::class, 'update']);
 Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+
+
+
+//----------------------------------
+
+Route::get('/images', [ImageController::class, 'index']);
+Route::get('/images/create',  [ImageController::class, 'create']);
+Route::post('/images',  [ImageController::class, 'store']);
+Route::get('/images/{image}/editImage',  [ImageController::class, 'edit']);
+Route::put('/images/{image}',  [ImageController::class, 'update']);
+Route::delete('/images/{image}',  [ImageController::class, 'destroy']);
+//----------------------------------
 
 /*Route::get('/posts/{post}/{category?}', function($post, $category = null) {
     
