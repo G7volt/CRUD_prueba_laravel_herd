@@ -20,12 +20,12 @@ Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 
 //----------------------------------
 
-Route::get('/images', [ImageController::class, 'index']);
-Route::get('/images/create',  [ImageController::class, 'create']);
-Route::post('/images',  [ImageController::class, 'store']);
-Route::get('/images/{image}/editImage',  [ImageController::class, 'edit']);
-Route::put('/images/{image}',  [ImageController::class, 'update']);
-Route::delete('/images/{image}',  [ImageController::class, 'destroy']);
+Route::get('/Image_Table', [ImageController::class, 'index']);
+Route::get('/Image_Table/create',  [ImageController::class, 'create']);
+Route::post('/Image_Table',  [ImageController::class, 'store']);
+Route::get('/Image_Table/{image}/editImage',  [ImageController::class, 'edit']);
+Route::put('/Image_Table/{image}',  [ImageController::class, 'update']);
+Route::delete('/Image_Table/{image}',  [ImageController::class, 'destroy']);
 //----------------------------------
 
 /*Route::get('/posts/{post}/{category?}', function($post, $category = null) {
