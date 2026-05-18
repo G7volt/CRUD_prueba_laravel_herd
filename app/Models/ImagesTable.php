@@ -16,7 +16,8 @@ class ImagesTable extends Model
     protected function casts(): array
     {
         return [
-            'published_at' => 'datetime',//Toma el campo de 'published_at' y hace que Carbon lo considere como tipo datetime en vez de string.
+            'creationDate' => 'datetime',//Toma el campo de 'published_at' y hace que Carbon lo considere como tipo datetime en vez de string.
+            'modificationDate' => 'dateTime',
             'is_active' => 'boolean'
         ];
     }

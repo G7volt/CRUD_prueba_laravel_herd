@@ -8,6 +8,8 @@ use App\Models\Post;
 
 Route::get('/', HomeController::class);
 
+//---------------------------------- Paginas de Posts ----------------------------------
+
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts/create', [PostController::class, 'create']);
 Route::get('/posts/{post}', [PostController::class, 'show']);
@@ -16,16 +18,15 @@ Route::get('/posts/{post}/editPost', [PostController::class, 'edit']);
 Route::put('/posts/{post}', [PostController::class, 'update']);
 Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 
-
-
-//----------------------------------
+//---------------------------------- Paginas de Imagenes ----------------------------------
 
 Route::get('/Image_Table', [ImageController::class, 'index']);
-Route::get('/Image_Table/create',  [ImageController::class, 'create']);
-Route::post('/Image_Table',  [ImageController::class, 'store']);
+Route::get('/Image_Table/newImage',  [ImageController::class, 'create']);
+Route::post('/Image_Table/newImage',  [ImageController::class, 'store']);
 Route::get('/Image_Table/{image}/editImage',  [ImageController::class, 'edit']);
 Route::put('/Image_Table/{image}',  [ImageController::class, 'update']);
 Route::delete('/Image_Table/{image}',  [ImageController::class, 'destroy']);
+
 //----------------------------------
 
 /*Route::get('/posts/{post}/{category?}', function($post, $category = null) {

@@ -25,16 +25,11 @@
                                 <th scope="col">Fecha de creacion</th>
                                 <th scope="col">Fecha de Modificacion</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($images as $image)
-                                <tr>
-                                <td><a href="/posts/{{$image->id}}">{{$image -> title}}</a></td>
-                                <td href="/posts/{{$image->id}}">{{$image -> category}}</td>
-                                <td href="/posts/{{$image->id}}">{{$image -> created_at}}</td>
-                                </tr>
-                                @endforeach
+                               
                             </tbody>
                     </table>
                 </div>

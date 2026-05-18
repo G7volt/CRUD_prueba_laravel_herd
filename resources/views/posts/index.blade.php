@@ -29,8 +29,8 @@
                 @foreach($posts as $post)
                 <tr>
                 <td><a href="/posts/{{$post->id}}">{{$post -> title}}</a></td>
-                <td href="/posts/{{$post->id}}">{{$post -> category}}</td>
-                <td href="/posts/{{$post->id}}">{{$post -> created_at}}</td>
+                <td >{{$post -> category}}</td>
+                <td >{{$post -> created_at}}</td>
                 </tr>
                 @endforeach
             </tbody>

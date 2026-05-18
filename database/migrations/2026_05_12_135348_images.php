@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
 
-            $table -> string('Description');
-            $table -> longText('imageUrl'); 
-            $table -> string('creationUser')->default('user');
+            $table -> string('description');
+            $table -> longText('image_url'); 
+            $table -> string('creation_user')->default('user');
 
-            $table->timestamp('creationDate')->nullable();
-            $table->timestamp('modificationDate')->nullable();
-            $table -> boolean('status')->default(true);  
+            $table->timestamp('creation_date')->nullable();
+            $table->timestamp('modification_date')->nullable();
+            $table -> boolean('status')->default('Activo');  
 
-            $table -> boolean('is_Active')->default(true);  
+            $table -> boolean('is_active')->default(true);  
 
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+       Schema::dropIfExists('images');
     }
 };
