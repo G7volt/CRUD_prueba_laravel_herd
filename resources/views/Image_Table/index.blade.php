@@ -23,13 +23,33 @@
                                 <th scope="col">Ruta</th>
                                 <th scope="col">Usuario</th>
                                 <th scope="col">Fecha de creacion</th>
-                                <th scope="col">Fecha de Modificacion</th>
+                                <!-- <th scope="col">Fecha de modificacion</th> -->
                                 <th scope="col">Status</th>
                                 <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                               
+                                @foreach($images as $image)
+                               <tr>
+                                <td>{{ $image->description}}</td>
+                                <td>{{ $image->image_url }}</td>
+                                <td>{{ $image->creation_user }}</td>
+                                <td>{{ $image->creation_date }}</td>
+                                <td>{{ $image->status }}</td>
+                                <td>
+                                <Button type="button" class="btn btn-primary">
+                                    <a href="/Image_Table/{{$image->image_url}}" style="color: white">
+                                        Ver Imagen
+                                    </a>
+                                </Button>
+                                <button type="button" class="btn btn-primary">
+                                    <a href="/Image_Table/{{$image->id}}/editImage" style="color: white">
+                                        Editar
+                                    </a>
+                                </button>
+                                </td>
+                               </tr>
+                               @endforeach
                             </tbody>
                     </table>
                 </div>

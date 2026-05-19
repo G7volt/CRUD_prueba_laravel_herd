@@ -22,7 +22,7 @@ Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 
 Route::get('/Image_Table', [ImageController::class, 'index']);
 Route::get('/Image_Table/newImage',  [ImageController::class, 'create']);
-Route::post('/Image_Table/newImage',  [ImageController::class, 'store']);
+Route::post('/Image_Table',  [ImageController::class, 'store']);
 Route::get('/Image_Table/{image}/editImage',  [ImageController::class, 'edit']);
 Route::put('/Image_Table/{image}',  [ImageController::class, 'update']);
 Route::delete('/Image_Table/{image}',  [ImageController::class, 'destroy']);
