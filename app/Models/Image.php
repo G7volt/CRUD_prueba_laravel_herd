@@ -16,7 +16,7 @@ class Image extends Model
     {
         return [
             'creation_date' => 'datetime',//Toma el campo de 'creation_date' y hace que Carbon lo considere como tipo datetime en vez de string.
-            'modification_date' => 'dateTime',
+            'modification_date' => 'datetime',
             'is_active' => 'boolean'
         ];
     }

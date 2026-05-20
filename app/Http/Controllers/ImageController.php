@@ -10,7 +10,6 @@ class ImageController extends Controller
     public function index(){
         //importante: el metodo orderBy devuelve una instancia de Builder, por lo que es necesario llamar al metodo get() para obtener los resultados de la consulta.
         $images = Image::orderBy('id', 'desc') -> get();
-        //dd($images);
         return view('Image_Table.index', compact('images'));
     }
 
@@ -20,10 +19,8 @@ class ImageController extends Controller
 
     //Funcion para almacenar los datos 
     public function store(Request $request){
-        //logica para almacenar los datos del formulario de imagenes
-        $image = new Image();
 
-        //Validamos que el archivo sea una imagen
+    //Validamos que el archivo sea una imagen
         $request -> validate([
             'image_url' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -33,13 +30,18 @@ class ImageController extends Controller
         $relativePath = $request -> file('image_url') -> store('images', 'public');
 
 
+        //logica para almacenar los datos del formulario de imagenes
+        $image = new Image();
+
         $image -> description = $request -> description;
         $image -> image_url = $relativePath; //Guardamos la ruta relativa en la base de datos
-        $image -> creation_user = $request -> creation_user;
-        $image -> creation_date = $request -> creation_date;
-        $image -> modification_date = $request -> modification_date;
-        $image -> status = $request -> status;
-        $image -> is_active = $request -> is_active;
+        $image -> creation_user = 'User'; //Asignamos un valor fijo para el usuario de creación, ya que no se está obteniendo del formulario
+        $image -> creation_date = now(); //Asignamos la fecha actual al campo de creación
+        $image -> modification_date = now();
+        $image -> status = 'Activo';
+        $image -> is_active = true;
+
+        //dd($image);
 
         $image -> save();
 
@@ -55,10 +57,6 @@ class ImageController extends Controller
     public function update(Request $request, $image){
         $image = Image::find($image);
 
-        //logica para almacenar los datos del formulario de imagenes
-        $image = new Image();
-
-        //Validamos que el archivo sea una imagen
         $request -> validate([
             'image_url' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -69,11 +67,13 @@ class ImageController extends Controller
 
         $image -> description = $request -> description;
         $image -> image_url = $relativePath; //Guardamos la ruta relativa en la base de datos
-        $image -> creation_user = $request -> creation_user;
-        $image -> creation_date = $request -> creation_date;
-        $image -> modification_date = $request -> modification_date;
-        $image -> status = $request -> status;
-        $image -> is_active = $request -> is_active;
+        $image -> creation_user = 'User';
+        $image -> creation_date = now(); //Asignamos la fecha actual al campo de creación
+        $image -> modification_date = now();
+        $image -> status = 'Activo';
+        $image -> is_active = true;
+
+        //dd($image);
 
         $image -> save();
 

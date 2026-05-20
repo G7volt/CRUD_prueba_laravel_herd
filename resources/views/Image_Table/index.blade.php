@@ -23,7 +23,7 @@
                                 <th scope="col">Ruta</th>
                                 <th scope="col">Usuario</th>
                                 <th scope="col">Fecha de creacion</th>
-                                <!-- <th scope="col">Fecha de modificacion</th> -->
+                                <th scope="col">Fecha de modificacion</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Acciones</th>
                                 </tr>
@@ -35,6 +35,7 @@
                                 <td>{{ $image->image_url }}</td>
                                 <td>{{ $image->creation_user }}</td>
                                 <td>{{ $image->creation_date }}</td>
+                                <td>{{ $image->modification_date ? $image->modification_date->format('d-m-Y') : '' }}</td>
                                 <td>{{ $image->status }}</td>
                                 <td>
                                 <Button type="button" class="btn btn-primary">
@@ -57,6 +58,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 </x-app-layout>

@@ -18,9 +18,9 @@ return new class extends Migration
             $table -> longText('image_url'); 
             $table -> string('creation_user')->default('user');
 
-            $table->timestamp('creation_date')->nullable();
-            $table->timestamp('modification_date')->nullable();
-            $table -> boolean('status')->default('Activo');  
+            $table->timestamp('creation_date')->useCurrent();
+            $table->timestamp('modification_date')->useCurrent();
+            $table -> string('status')->default('Activo');  
 
             $table -> boolean('is_active')->default(true);  
 
