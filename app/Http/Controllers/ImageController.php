@@ -10,6 +10,7 @@ class ImageController extends Controller
     public function index(){
         //importante: el metodo orderBy devuelve una instancia de Builder, por lo que es necesario llamar al metodo get() para obtener los resultados de la consulta.
         $images = Image::orderBy('id', 'desc') -> get();
+        $images = Image::orderBy('id', 'desc') -> paginate(5);
         return view('Image_Table.index', compact('images'));
     }
 
@@ -68,7 +69,6 @@ class ImageController extends Controller
         $image -> description = $request -> description;
         $image -> image_url = $relativePath; //Guardamos la ruta relativa en la base de datos
         $image -> creation_user = 'User';
-        $image -> creation_date = now(); //Asignamos la fecha actual al campo de creación
         $image -> modification_date = now();
         $image -> status = 'Activo';
         $image -> is_active = true;
@@ -83,6 +83,15 @@ class ImageController extends Controller
     public function destroy($image){
         $image = Image::find($image);
         $image -> delete();
+
+        return redirect('/Image_Table');
+    }
+
+    public function changeStatus(Image $image){
+
+        $image -> status = $image -> status === 'Activo' ? 'Inactivo' : 'Activo';
+        $image -> modification_date = now();
+        $image -> save();
 
         return redirect('/Image_Table');
     }
