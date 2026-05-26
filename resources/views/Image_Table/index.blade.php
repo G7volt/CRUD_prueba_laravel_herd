@@ -1,5 +1,8 @@
 <x-app-layout>
 
+    <br>
+    <br>
+
     <h1 class="text-center">Tabla de imagenes</h1>
 
     <br>

@@ -26,8 +26,8 @@
                                 <input type="file" class="form-control" id="image_url" name="image_url" onchange="previewImage(event)">
                             </div>
 
-                            <div class="mb-3">
-                                <img id="imagePreview" src="#" alt="Imagen Seleccionada" style="max-width: 200px; max-height: 200px;">
+                            <div class="mb-3 align-middle">
+                                <img id="imagePreview" src="#" alt="Imagen Seleccionada" style="max-width: 400px; max-height: 400px; ">
                             </div> 
                             <button type="submit" class="btn btn-primary">Agregar Imagen</button>
                         </form>

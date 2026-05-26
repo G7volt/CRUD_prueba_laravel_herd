@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
 
 class ImageController extends Controller
 {
@@ -28,21 +30,27 @@ class ImageController extends Controller
 
         //guardamos la imagen en storage/app/public/images y obtenemos la ruta de la imagen guardada
         //El metodo solo devolvera la ruta relativa
-        $relativePath = $request -> file('image_url') -> store('images', 'public');
+        $relativePath = $request -> file('image_url');
+        $filename = time() . '.' . $relativePath->getClientOriginalExtension();
+        $path = storage_path('app/public/storage/images' . $filename);
 
+        //Redimensionar imagen
+        $manager = ImageManager::imagick();
+        $manager->read($relativePath->getPathname())
+                ->scale(width: 800)
+                ->save($path);
+        
 
         //logica para almacenar los datos del formulario de imagenes
         $image = new Image();
 
         $image -> description = $request -> description;
-        $image -> image_url = $relativePath; //Guardamos la ruta relativa en la base de datos
+        $image -> image_url = 'images/' . $filename; //Guardamos la ruta relativa en la base de datos
         $image -> creation_user = 'User'; //Asignamos un valor fijo para el usuario de creación, ya que no se está obteniendo del formulario
         $image -> creation_date = now(); //Asignamos la fecha actual al campo de creación
         $image -> modification_date = now();
         $image -> status = 'Activo';
         $image -> is_active = true;
-
-        //dd($image);
 
         $image -> save();
 
