@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ImageController extends Controller
 {
     public function index(){
         //importante: el metodo orderBy devuelve una instancia de Builder, por lo que es necesario llamar al metodo get() para obtener los resultados de la consulta.
         $images = Image::orderBy('id', 'desc') -> get();
-        $images = Image::orderBy('id', 'desc') -> paginate(5);
+        $images = Image::orderBy('id', 'desc') -> paginate(10);
         return view('Image_Table.index', compact('images'));
     }
 
@@ -20,42 +20,33 @@ class ImageController extends Controller
         return view('Image_Table.newImage');
     }
 
-    //Funcion para almacenar los datos 
     public function store(Request $request){
-
-    //Validamos que el archivo sea una imagen
-        $request -> validate([
+        $request->validate([
             'image_url' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        //guardamos la imagen en storage/app/public/images y obtenemos la ruta de la imagen guardada
-        //El metodo solo devolvera la ruta relativa
-        $relativePath = $request -> file('image_url');
-        $filename = time() . '.' . $relativePath->getClientOriginalExtension();
-        $path = storage_path('app/public/storage/images' . $filename);
+        $relativePath = $request->file('image_url')->store('images', 'public');
 
-        //Redimensionar imagen
-        $manager = ImageManager::imagick();
-        $manager->read($relativePath->getPathname())
-                ->scale(width: 800)
-                ->save($path);
+        $fullPath = storage_path('app/public/' . $relativePath);
         
+        $resize = ImageManager::usingDriver(Driver::class)->decode(file_get_contents($fullPath));
+        $resize->resize(800,600);
+        $resize->save($fullPath);
 
-        //logica para almacenar los datos del formulario de imagenes
         $image = new Image();
+        $image->description       = $request->description;
+        $image->image_url         = $relativePath;
+        $image->creation_user     = 'Admin';  
+        $image->creation_date     = now();    
+        $image->modification_date = now();     
+        $image->status            = 'Activo'; 
+        $image->is_active         = true;    
 
-        $image -> description = $request -> description;
-        $image -> image_url = 'images/' . $filename; //Guardamos la ruta relativa en la base de datos
-        $image -> creation_user = 'User'; //Asignamos un valor fijo para el usuario de creación, ya que no se está obteniendo del formulario
-        $image -> creation_date = now(); //Asignamos la fecha actual al campo de creación
-        $image -> modification_date = now();
-        $image -> status = 'Activo';
-        $image -> is_active = true;
+        //dd($image); // verifica que ya no lleguen nulls
 
-        $image -> save();
+        $image->save();
 
         return redirect('/Image_Table');
-
     }
 
     public function edit($image){

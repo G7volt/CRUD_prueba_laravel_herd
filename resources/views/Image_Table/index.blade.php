@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card d-grid gap-2 d-md-block justify-content-md-end">
-                <button type="button" class="btn btn-primary" >
+                <button type="button" class="btn btn-primary mt-3 ms-3" >
                     <a href="/Image_Table/newImage" style="color: white">
                         Nueva Imagen
                     </a>
@@ -61,6 +61,14 @@
                                                     Cambiar Estado
                                                 </button>
                                             </form>
+                                            <form action="/Image_Table/{{$image->id}}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                            <button type="submit" class="dropdown-item">
+                                                Eliminar
+                                            </button>
+                                        </form>
+
                                         </div>
                                     </div>
                                 </td>
@@ -74,7 +82,7 @@
     </div>
 </div>
 
-    <nav aria-label="Page navigation example position-absolute">
+    <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
         <ul class="pagination">
             {{$images->links()}}
         </ul>

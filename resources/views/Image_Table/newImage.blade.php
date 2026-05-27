@@ -9,11 +9,6 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card d-grid gap-2 d-md-block justify-content-md-end">
-                    <button type="button" class="btn btn-primary" >
-                        <a href="/Image_Table" style="color: white">
-                            Volver
-                        </a>
-                    </button>
                     <div class="card-body">
                         <form action="/Image_Table" method="POST" enctype="multipart/form-data">
                             @csrf
@@ -26,10 +21,17 @@
                                 <input type="file" class="form-control" id="image_url" name="image_url" onchange="previewImage(event)">
                             </div>
 
-                            <div class="mb-3 align-middle">
+                            <div class="d-flex justify-content-center mt-3 mb-3">
                                 <img id="imagePreview" src="#" alt="Imagen Seleccionada" style="max-width: 400px; max-height: 400px; ">
                             </div> 
-                            <button type="submit" class="btn btn-primary">Agregar Imagen</button>
+                            <div class="d-flex justify-content-center mt-1 mb-0.5">
+                                <button type="submit" class="btn btn-primary me-1">Agregar Imagen</button>
+                                <button type="button" class="btn btn-primary" >
+                                    <a href="/Image_Table" style="color: white">
+                                        Volver
+                                    </a>
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
