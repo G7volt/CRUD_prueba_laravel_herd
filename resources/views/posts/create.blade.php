@@ -7,28 +7,38 @@
         <a href="/posts" style="color: white">Cancelar</a>
     </button>
 
-    <h1 class="text-center">formulario para crear un Post</h1>
+   @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    </div>
 
     <form action="/posts" method="POST">
         @csrf
         <label>
             Titulo:
-            <input type="text" name="title" id="title">
+            <input type="text" name="title" id="title" value="{{old('title')}}">
         </label>
                 <br>
                 <br>
         <label>
             Categoria:
-            <input type="text" name="category" id="category">
+            <input type="text" name="category" id="category" value="{{old('category')}}">
         </label>
                 <br>
                 <br>
         <label>
             contenido
             <br>
-            <textarea name="content" id="content" cols="50" rows="5"></textarea>
+            <textarea name="content" id="content" cols="50" rows="5">{{old('content')}}</textarea>
         </label>
-        
+
         <br>
         <br>
         <button type="submit button" class="btn btn-primary">

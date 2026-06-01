@@ -12,7 +12,7 @@
     </button>
 
     <button type="button" class="btn btn-primary" >
-        <a href="{{route('posts.create')}}" style="color: white">
+        <a href="/posts/create" style="color: white">
             Nuevo Post
         </a>
     </button>
@@ -28,7 +28,7 @@
             <tbody>
                 @foreach($posts as $post)
                 <tr>
-                <td><a href="{{route('posts.show', $post->id)}}">{{$post -> title}}</a></td>
+                <td><a href="/posts/{{$post->id}}">{{$post -> title}}</a></td>
                 <td >{{$post -> category}}</td>
                 <td >{{$post -> created_at}}</td>
                 </tr>

@@ -13,6 +13,16 @@ class Post extends Model
 
     use HasFactory;
 
+   /*  protected $fillable = [
+        'title',
+        'category',
+        'content'
+    ]; */
+
+    protected $guarded = [
+        'is_Active'
+    ];
+
     //casting: permite transformar datos del modelo Eloquent a un tipo de dato especifico sin definir mutadores o accesores
     protected function casts(): array
     {

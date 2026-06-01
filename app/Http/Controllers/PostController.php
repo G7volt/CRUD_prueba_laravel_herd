@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -17,16 +18,12 @@ class PostController extends Controller
     }
 
     //Funcion para almacenar los datos enviados desde el formulario, guarda los datos proporcionados y los guarda en la base de datos.
-    public function store(Request $request){
-        $post = new Post();
- 
-        $post -> title = $request -> title;
-        $post -> category = $request -> category;
-        $post -> content = $request -> content; 
-         
-        $post -> save();
+    public function store(StorePostRequest $request){
 
-        return redirect('/posts');
+        
+
+        Post::create($request->all());
+        return redirect('/posts'); 
     }
 
     public function show($post){
@@ -42,12 +39,18 @@ class PostController extends Controller
     public function update(Request $request, $post){
        $post = Post::find($post);
 
-        $post -> title = $request -> title;
+       $request->validate([
+            'title' => 'required',
+            'category' => 'required',
+            'content' => 'required'
+        ]);
+
+        $post->update($request->all());
+
+        /* $post -> title = $request -> title;
         $post -> category = $request -> category;
         $post -> content = $request -> content; 
-
-        $post->save();
-
+        $post->save();*/
         return redirect("/posts/{$post->id}");
     }
 

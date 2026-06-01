@@ -9,6 +9,16 @@
 
     <h1 class="text-center">formulario para editar un Post</h1>
 
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <form action="/posts/{{$post->id}}" method="POST">
 
         @csrf

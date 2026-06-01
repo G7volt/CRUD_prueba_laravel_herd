@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->timestamp('published_at')->nullable();
 
-            $table -> boolean('is_active')->default(true);
+            $table -> boolean('is_active')->default(false);
 
             $table->timestamps();
         });
