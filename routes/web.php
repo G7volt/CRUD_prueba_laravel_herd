@@ -20,13 +20,13 @@ Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 
 //---------------------------------- Paginas de Imagenes ----------------------------------
 
-Route::get('/Image_Table', [ImageController::class, 'index']);
-Route::get('/Image_Table/newImage',  [ImageController::class, 'create']);
-Route::post('/Image_Table',  [ImageController::class, 'store']);
-Route::get('/Image_Table/{image}/editImage',  [ImageController::class, 'edit']);
-Route::put('/Image_Table/{image}',  [ImageController::class, 'update']);
+Route::get('/Image_Table', [ImageController::class, 'index'])->name('images.index');
+Route::get('/Image_Table/newImage',  [ImageController::class, 'create'])->name('images.create');
+Route::post('/Image_Table',  [ImageController::class, 'store'])->name('images.store');
+Route::get('/Image_Table/{image}/editImage',  [ImageController::class, 'edit'])->name('images.edit');
+Route::put('/Image_Table/{image}',  [ImageController::class, 'update'])->name('images.update');
 Route::patch('/Image_Table/{image}/changeStatus', [ImageController::class, 'changeStatus']) -> name('images.changeStatus');
-Route::delete('/Image_Table/{image}',  [ImageController::class, 'destroy']);
+Route::delete('/Image_Table/{image}',  [ImageController::class, 'destroy'])->name('images.destroy');
 
 //----------------------------------
 

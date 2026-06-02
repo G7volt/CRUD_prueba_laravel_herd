@@ -12,6 +12,16 @@ class Image extends Model
 
     protected $table = 'images';
 
+    protected $fillable = [
+        'description',
+        'image_url',
+        'creation_user',
+        'creation_date',
+        'modification_date',
+        'status',
+        'is_active'
+    ];
+
     protected function casts(): array
     {
         return [

@@ -10,15 +10,21 @@
             <div class="col-md-12">
                 <div class="card d-grid gap-2 d-md-block justify-content-md-end">
                     <div class="card-body">
-                        <form action="/Image_Table" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('images.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label for="description" class="form-label">Descripcion</label>
-                                <input type="text" class="form-control" id="description" name="description">
+                                <input type="text" class="form-control @error('description') is-invalid @enderror" id="description" name="description">
+                                @error('description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="image_url" class="form-label">Ruta de la imagen</label>
-                                <input type="file" class="form-control" id="image_url" name="image_url" onchange="previewImage(event)">
+                                <input type="file" class="form-control @error('image_url') is-invalid @enderror" id="image_url" name="image_url" onchange="previewImage(event)">
+                                @error('image_url')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="d-flex justify-content-center mt-3 mb-3">
@@ -27,7 +33,7 @@
                             <div class="d-flex justify-content-center mt-1 mb-0.5">
                                 <button type="submit" class="btn btn-primary me-1">Agregar Imagen</button>
                                 <button type="button" class="btn btn-primary" >
-                                    <a href="/Image_Table" style="color: white">
+                                    <a href="{{ route('images.index') }}" style="color: white">
                                         Volver
                                     </a>
                                 </button>
@@ -37,6 +43,19 @@
                 </div>
             </div>
         </div>
+
+        <br>
+
+        {{-- @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif --}}
+
     <script>
             //Funcion para mostrar la imagen seleccionada antes de subir una imagen nueva
             function previewImage(event) {

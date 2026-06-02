@@ -9,10 +9,23 @@ use Intervention\Image\Drivers\Gd\Driver;
 
 class ImageController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         //importante: el metodo orderBy devuelve una instancia de Builder, por lo que es necesario llamar al metodo get() para obtener los resultados de la consulta.
-        $images = Image::orderBy('id', 'desc') -> get();
-        $images = Image::orderBy('id', 'desc') -> paginate(10);
+        $images = Image::orderBy('creation_date', 'desc') -> get();
+        $images = Image::orderBy('creation_date', 'desc') -> paginate(10);
+
+        //Captura el valor del imput 'buscar'
+        $busqueda = $request -> input('search');
+
+        //filtra los productos si hay una busqueda en el imput, de lo contrario trae todos
+        $images = Image::query() 
+                ->when($busqueda, function($query, $busqueda){
+                    return $query -> where('description', 'ilike', "%{$busqueda}%")
+                    ->orWhere('description', 'ilike', "%{$busqueda}%");
+                })
+                ->paginate(10)//Resultado de la busqueda pagina en 10 en 10
+                ->appends(['search' => $busqueda]); //Mantiene el valor del imput 'buscar' en la paginacion
+
         return view('Image_Table.index', compact('images'));
     }
 
@@ -21,8 +34,16 @@ class ImageController extends Controller
     }
 
     public function store(Request $request){
+
         $request->validate([
+            'description' => 'required',
             'image_url' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ],[
+            'description.required' => 'La descripcion es obligatoria',
+            'image_url.required' => 'La imagen es obligatoria',
+            'image_url.image' => 'El archivo debe ser una imagen',
+            'image_url.mimes' => 'La imagen debe ser un archivo de tipo: jpeg, png, jpg, gif, svg',
+            'image_url.max' => 'La imagen no debe ser mayor a 2MB',
         ]);
 
         $relativePath = $request->file('image_url')->store('images', 'public');
@@ -39,11 +60,8 @@ class ImageController extends Controller
         $image->creation_user     = 'Admin';  
         $image->creation_date     = now();    
         $image->modification_date = now();     
-        $image->status            = 'Activo'; 
-        $image->is_active         = true;    
-
-        //dd($image); // verifica que ya no lleguen nulls
-
+        $image->status            = 'Inactivo'; 
+        $image->is_active         = false;    
         $image->save();
 
         return redirect('/Image_Table');
@@ -58,7 +76,14 @@ class ImageController extends Controller
         $image = Image::find($image);
 
         $request -> validate([
+            'description' => 'required',
             'image_url' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ], [
+            'description.required' => 'La descripcion es obligatoria',
+            'image_url.required' => 'La imagen es obligatoria',
+            'image_url.image' => 'El archivo debe ser una imagen',
+            'image_url.mimes' => 'La imagen debe ser un archivo de tipo: jpeg, png, jpg, gif, svg',
+            'image_url.max' => 'La imagen no debe ser mayor a 2MB',
         ]);
 
         //guardamos la imagen en storage/app/public/images y obtenemos la ruta de la imagen guardada
@@ -89,6 +114,7 @@ class ImageController extends Controller
     public function changeStatus(Image $image){
 
         $image -> status = $image -> status === 'Activo' ? 'Inactivo' : 'Activo';
+        $image -> is_active = !$image -> is_active;
         $image -> modification_date = now();
         $image -> save();
 

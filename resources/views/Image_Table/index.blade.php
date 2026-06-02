@@ -13,11 +13,20 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card d-grid gap-2 d-md-block justify-content-md-end">
-                <button type="button" class="btn btn-primary mt-3 ms-3" >
-                    <a href="/Image_Table/newImage" style="color: white">
+                <div class="d-flex justify-content-end mt-3 me-3 ms-3">
+                    <form action="{{ route('images.index')}}" method='GET' class="d-flex justify-content-end mt-4 me-3 ms-3">
+                        <div class="input-group">
+                            <input class="form-control me-2" type="search" placeholder="Buscar por descripcion" aria-label="Search" name="search" value="{{request('search')}}">
+                            <button class="btn btn-outline-success" type="submit">Buscar</button>
+                        </div>
+                    </form>
+                    <button type="button" class="btn btn-primary mt-3 ms-3" >
+                    <a href="{{ route('images.create') }}" style="color: white">
                         Nueva Imagen
                     </a>
-                </button>
+                    </button>
+                </div>
+                <form action="{{ route('images.index') }}"></form>
                 <div class="card-body">
                         <table class="table table-border">
                             <thead>
@@ -32,7 +41,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($images as $image)
+                                <!--Muestra imagenes si encuentra la descripcion, en caso contrario muestra un mensaje de 'no encontrado'-->
+                                @forelse($images as $image)
                                <tr>
                                 <td class="align-middle">{{ $image->description}}</td>
                                 <td class="align-middle">{{ $image->image_url }}</td>
@@ -47,7 +57,7 @@
                                             Acciones
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="/Image_Table/{{$image->id}}/editImage">Editar</a>
+                                            <a class="dropdown-item" href="{{ route('images.edit', $image->id) }}">Editar</a>
                                             <a class="dropdown-item" data-bs-toggle="modal"
                                             data-bs-target="#modalImage"
                                             data-description="{{ $image->description }}"
@@ -61,19 +71,22 @@
                                                     Cambiar Estado
                                                 </button>
                                             </form>
-                                            <form action="/Image_Table/{{$image->id}}" method="POST">
+                                            <form action="{{ route('images.destroy', $image->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                            <button type="submit" class="dropdown-item">
-                                                Eliminar
-                                            </button>
-                                        </form>
-
+                                                <button type="submit" class="dropdown-item">
+                                                    Eliminar
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </td>
                                </tr>
-                               @endforeach
+                               @empty
+                               <tr>
+                                   <td colspan="7" class="text-center">No hay imágenes para mostrar.</td>
+                               </tr>
+                               @endforelse
                             </tbody>
                     </table>
                 </div>
