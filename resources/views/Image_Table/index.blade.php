@@ -16,12 +16,19 @@
                 <div class="d-flex justify-content-end mt-3 me-3 ms-3">
                     <form action="{{ route('images.index')}}" method='GET' class="d-flex justify-content-end mt-4 me-3 ms-3">
                         <div class="input-group">
-                            <input class="form-control me-2" type="search" placeholder="Buscar por descripcion" aria-label="Search" name="search" value="{{request('search')}}">
+                            <input 
+                            id="searchInput" 
+                            class="form-control me-2" 
+                            type="search" 
+                            placeholder="Buscar por descripcion" 
+                            aria-label="Search" 
+                            name="search" 
+                            value="{{request('search')}}">
                             <button class="btn btn-outline-success" type="submit">Buscar</button>
                         </div>
                     </form>
                     <button type="button" class="btn btn-primary mt-3 ms-3" >
-                    <a href="{{ route('images.create') }}" style="color: white">
+                    <a href="{{ route('images.create') }}" style="color: white" data-bs-toggle="modal" data-bs-target="#newImage">
                         Nueva Imagen
                     </a>
                     </button>
@@ -40,53 +47,8 @@
                                 <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <!--Muestra imagenes si encuentra la descripcion, en caso contrario muestra un mensaje de 'no encontrado'-->
-                                @forelse($images as $image)
-                               <tr>
-                                <td class="align-middle">{{ $image->description}}</td>
-                                <td class="align-middle">{{ $image->image_url }}</td>
-                                <td class="align-middle">{{ $image->creation_user }}</td>
-                                <td class="align-middle">{{ $image->creation_date }}</td>
-                                <td class="align-middle">{{ $image->modification_date }}</td>
-                                <td>{{ $image->status }}</td>
-                                <td >
-
-                                    <div class="dropdown">
-                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Acciones
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="{{ route('images.edit', $image->id) }}">Editar</a>
-                                            <a class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#modalImage"
-                                            data-description="{{ $image->description }}"
-                                            data-url="{{ asset('storage/' . $image->image_url) }}">
-                                            Imagen Completa
-                                            </a>
-                                            <form action="{{ route('images.changeStatus', $image->id) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="dropdown-item">
-                                                    Cambiar Estado
-                                                </button>
-                                            </form>
-                                            <form action="{{ route('images.destroy', $image->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item">
-                                                    Eliminar
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
-                               </tr>
-                               @empty
-                               <tr>
-                                   <td colspan="7" class="text-center">No hay imágenes para mostrar.</td>
-                               </tr>
-                               @endforelse
+                            <tbody id="tablaBody">
+                                @include('components.partials.tabla', ['images' => $images])
                             </tbody>
                     </table>
                 </div>
@@ -101,42 +63,35 @@
         </ul>
     </nav>
 
-<div class="modal fade" id="modalImage" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-description" id="modalDescription"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body text-center">
-                <img id="modalImagen" src="" alt="imagen actual" class="img-fluid" style="max-width: 465px; max-height: 465px">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
+<x-newImage-modal />
 
+<x-editImage :image="$image" />
 
+<x-image-preview />
 
-<!--Mostrar preview de imagen en modal-->
 <script>
-    document.getElementById('modalImage').addEventListener('show.bs.modal', function(event) {
-        const button = event.relatedTarget;
+    //manda a traer el valor del input de busqueda
+    const searchInput = document.getElementById('searchInput')
 
-        const description = button.getAttribute('data-description');
-        const url    = button.getAttribute('data-url');
-
-        document.getElementById('modalDescription').textContent = description;
-        document.getElementById('modalImagen').src = url;
-
-        function previewImage(event) {
-            const input   = event.target;
-            const preview = document.getElementById('imagePreview');
-            preview.style.display = 'block';
-        }
+    //se ejecuta mientras escribes en el imput de busqueda
+    searchInput.addEventListener('keyup', funtion(){
+        buscar();
     });
+
+    function buscar(){
+        const search = searchInput.value.toLowerCase()//manda a traer el valor del input y lo transforma a minuscula
+
+        //hace fetch a la ruta index  de imagenes, pasando el valor del input de busqueda como parametro
+        fetch(`{{ route('images.index') }}?search=${search}`, {
+            headers: {
+                'X.Requested-With': 'XMLHttpRequest' //indica que la solicitud se realiza mediante AJAX
+            }
+        })
+        .then(response => response.json())//convierte la respuesta a json
+        .then(data => {
+            document.getElementById('tablaBody').innerHTML = data.html;//actualiza el contenido de la tabla con los resultados de la busqueda
+        })
+    }
 </script>
 
 </x-app-layout>

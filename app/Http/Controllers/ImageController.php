@@ -24,7 +24,15 @@ class ImageController extends Controller
                     ->orWhere('description', 'ilike', "%{$busqueda}%");
                 })
                 ->paginate(10)//Resultado de la busqueda pagina en 10 en 10
-                ->appends(['search' => $busqueda]); //Mantiene el valor del imput 'buscar' en la paginacion
+                ->appends(['search' => $busqueda])
+                ->appends($request->query()); //Mantiene el valor del imput 'buscar' en la paginacion
+
+                //Si es vista AJAX retorna un json como los datos de la tabla, de lo contrario retorna la vista normal
+        if ($request->ajax()){
+            return response()->json([
+                'html' => view('Image_Table.partials.table', compact('images')) -> render()
+            ]);
+        }
 
         return view('Image_Table.index', compact('images'));
     }
