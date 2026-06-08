@@ -48,7 +48,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tablaBody">
-                                @include('components.partials.tabla', ['images' => $images])
+                                @include('Image_Table.partials.tabla'/* , ['images' => $images] */)
                             </tbody>
                     </table>
                 </div>
@@ -65,7 +65,7 @@
 
 <x-newImage-modal />
 
-<x-editImage :image="$image" />
+<x-editImage :image = $image/>
 
 <x-image-preview />
 
@@ -74,7 +74,7 @@
     const searchInput = document.getElementById('searchInput')
 
     //se ejecuta mientras escribes en el imput de busqueda
-    searchInput.addEventListener('keyup', funtion(){
+    searchInput.addEventListener('keyup', function(){
         buscar();
     });
 
@@ -84,7 +84,7 @@
         //hace fetch a la ruta index  de imagenes, pasando el valor del input de busqueda como parametro
         fetch(`{{ route('images.index') }}?search=${search}`, {
             headers: {
-                'X.Requested-With': 'XMLHttpRequest' //indica que la solicitud se realiza mediante AJAX
+                'X-Requested-With': 'XMLHttpRequest' //indica que la solicitud se realiza mediante AJAX
             }
         })
         .then(response => response.json())//convierte la respuesta a json

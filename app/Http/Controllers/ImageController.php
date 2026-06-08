@@ -6,13 +6,16 @@ use App\Models\Image;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\Validator;
 
 class ImageController extends Controller
 {
     public function index(Request $request){
         //importante: el metodo orderBy devuelve una instancia de Builder, por lo que es necesario llamar al metodo get() para obtener los resultados de la consulta.
-        $images = Image::orderBy('creation_date', 'desc') -> get();
-        $images = Image::orderBy('creation_date', 'desc') -> paginate(10);
+        $orderBy = $request->input('order', 'desc') ;
+
+        /* $images = Image::orderBy('creation_date', 'desc') -> get();
+        $images = Image::orderBy('creation_date', 'desc') -> paginate(10); */
 
         //Captura el valor del imput 'buscar'
         $busqueda = $request -> input('search');
@@ -20,17 +23,18 @@ class ImageController extends Controller
         //filtra los productos si hay una busqueda en el imput, de lo contrario trae todos
         $images = Image::query() 
                 ->when($busqueda, function($query, $busqueda){
-                    return $query -> where('description', 'ilike', "%{$busqueda}%")
+                    $query -> where('description', 'ilike', "%{$busqueda}%")
                     ->orWhere('description', 'ilike', "%{$busqueda}%");
                 })
+                ->orderBy('creation_date', $orderBy)
                 ->paginate(10)//Resultado de la busqueda pagina en 10 en 10
-                ->appends(['search' => $busqueda])
+                //->appends(['search' => $busqueda])
                 ->appends($request->query()); //Mantiene el valor del imput 'buscar' en la paginacion
 
                 //Si es vista AJAX retorna un json como los datos de la tabla, de lo contrario retorna la vista normal
         if ($request->ajax()){
             return response()->json([
-                'html' => view('Image_Table.partials.table', compact('images')) -> render()
+                'html' => view('Image_Table.partials.tabla', compact('images')) -> render()
             ]);
         }
 
@@ -43,7 +47,7 @@ class ImageController extends Controller
 
     public function store(Request $request){
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'description' => 'required',
             'image_url' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ],[
@@ -53,6 +57,14 @@ class ImageController extends Controller
             'image_url.mimes' => 'La imagen debe ser un archivo de tipo: jpeg, png, jpg, gif, svg',
             'image_url.max' => 'La imagen no debe ser mayor a 2MB',
         ]);
+
+        //Si hay errores retorna los mensajes
+        if ($validator->fails()) {
+            return response()->json([
+                'succes' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
         $relativePath = $request->file('image_url')->store('images', 'public');
 
@@ -72,7 +84,12 @@ class ImageController extends Controller
         $image->is_active         = false;    
         $image->save();
 
-        return redirect('/Image_Table');
+        return response()->json([
+            'succes' => true,
+            'html' => view('Image_Table.partials.tabla', [
+                'images' => Image::orderBy('creation_date', 'desc')->paginate(10)
+            ])->render()
+        ]);
     }
 
     public function edit($image){
