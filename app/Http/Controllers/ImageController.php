@@ -85,7 +85,7 @@ class ImageController extends Controller
         $image->save();
 
         return response()->json([
-            'succes' => true,
+            'success' => true,
             'html' => view('Image_Table.partials.tabla', [
                 'images' => Image::orderBy('creation_date', 'desc')->paginate(10)
             ])->render()
@@ -98,12 +98,11 @@ class ImageController extends Controller
     }
 
     public function update(Request $request, $image){
-        $image = Image::find($image);
 
-        $request -> validate([
+        $validator = Validator::make($request->all(), [
             'description' => 'required',
             'image_url' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ], [
+        ],[
             'description.required' => 'La descripcion es obligatoria',
             'image_url.required' => 'La imagen es obligatoria',
             'image_url.image' => 'El archivo debe ser una imagen',
@@ -111,25 +110,46 @@ class ImageController extends Controller
             'image_url.max' => 'La imagen no debe ser mayor a 2MB',
         ]);
 
+        //Si hay errores retorna los mensajes
+        if ($validator->fails()) {
+            return response()->json([
+                'succes' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
         //guardamos la imagen en storage/app/public/images y obtenemos la ruta de la imagen guardada
         //El metodo solo devolvera la ruta relativa
-        $relativePath = $request -> file('image_url') -> store('images', 'public');
+        $relativePath = $request->file('image_url')->store('images', 'public');
 
-        $image -> description = $request -> description;
-        $image -> image_url = $relativePath; //Guardamos la ruta relativa en la base de datos
-        $image -> creation_user = 'User';
-        $image -> modification_date = now();
-        $image -> status = 'Activo';
-        $image -> is_active = true;
+        $fullPath = storage_path('app/public/' . $relativePath);
+        
+        $resize = ImageManager::usingDriver(Driver::class)->decode(file_get_contents($fullPath));
+        $resize->resize(800,600);
+        $resize->save($fullPath);
 
+        $image = new Image();
+        $image->description       = $request->description;
+        $image->image_url         = $relativePath;
+        $image->creation_user     = 'Admin';  
+        $image->creation_date     = now();    
+        $image->modification_date = now();     
+        $image->status            = 'Inactivo'; 
+        $image->is_active         = false;    
+        $image->save();
         //dd($image);
 
         $image -> save();
 
-        return redirect('/Image_Table');
+        return response()->json([
+            'success' => true,
+            'html' => view('Image_Table.partials.tabla', [
+                'images' => Image::orderBy('creation_date', 'desc')->paginate(10)
+            ])->render()
+        ]);
     }
 
-    public function destroy($image){
+    public function destroy(Request $request, $image){
         $image = Image::find($image);
         $image -> delete();
 

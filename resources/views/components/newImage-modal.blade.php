@@ -5,9 +5,9 @@
         <h1 class="text-center">Nueva imagen</h1>
       </div>
       <div class="modal-body">
-        <form id="formNuevaImagen"{{-- action="{{ route('images.store') }}" method="POST" --}} enctype="multipart/form-data">
+        <form id="formNuevaImagen"action="{{ route('images.store') }}" {{-- method="POST" --}} enctype="multipart/form-data">
             @csrf
-            <div class="mb-3">
+            <div class="mb-3"> 
                 <label for="description" class="form-label">Descripcion</label>
                 <input type="text" class="form-control" id="description" name="description" required>
                 {{--Div para mostrar el error de campo faltante--}}
@@ -73,11 +73,11 @@ document.getElementById('formNuevaImagen').addEventListener('submit', function(e
 
         } else {
             //Muestra errores dentro del modal
-            if (data.errors.description) {
+            if (data.errors && data.errors.description) {
                 document.getElementById('description').classList.add('is-invalid');
                 document.getElementById('errorDescription').textContent = data.errors.description[0];
             }
-            if (data.errors.image_url) {
+            if (data.errors && data.errors.image_url) {
                 document.getElementById('image_url').classList.add('is-invalid');
                 document.getElementById('errorImageUrl').textContent = data.errors.image_url[0];
             }

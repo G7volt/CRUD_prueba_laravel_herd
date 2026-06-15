@@ -65,7 +65,7 @@
 
 <x-newImage-modal />
 
-<x-editImage :image = $image/>
+<x-editImage $image=image/>
 
 <x-image-preview />
 
