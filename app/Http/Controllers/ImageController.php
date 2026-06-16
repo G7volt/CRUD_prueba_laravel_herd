@@ -101,7 +101,7 @@ class ImageController extends Controller
 
         $validator = Validator::make($request->all(), [
             'description' => 'required',
-            'image_url' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ],[
             'description.required' => 'La descripcion es obligatoria',
             'image_url.required' => 'La imagen es obligatoria',
@@ -113,33 +113,27 @@ class ImageController extends Controller
         //Si hay errores retorna los mensajes
         if ($validator->fails()) {
             return response()->json([
-                'succes' => false,
+                'success' => false,
                 'errors' => $validator->errors()
             ], 422);
         }
 
-        //guardamos la imagen en storage/app/public/images y obtenemos la ruta de la imagen guardada
-        //El metodo solo devolvera la ruta relativa
-        $relativePath = $request->file('image_url')->store('images', 'public');
+        if ($request->hasFile('image_url')) {
+            //guardamos la imagen en storage/app/public/images y obtenemos la ruta de la imagen guardada
+            //El metodo solo devolvera la ruta relativa
+            $relativePath = $request->file('image_url')->store('images', 'public');
+            $fullPath = storage_path('app/public/' . $relativePath);
 
-        $fullPath = storage_path('app/public/' . $relativePath);
-        
-        $resize = ImageManager::usingDriver(Driver::class)->decode(file_get_contents($fullPath));
-        $resize->resize(800,600);
-        $resize->save($fullPath);
+            $resize = ImageManager::usingDriver(Driver::class)->decode(file_get_contents($fullPath));
+            $resize->resize(800,600);
+            $resize->save($fullPath);
 
-        $image = new Image();
+            $image->image_url = $relativePath;
+        }
+
         $image->description       = $request->description;
-        $image->image_url         = $relativePath;
-        $image->creation_user     = 'Admin';  
-        $image->creation_date     = now();    
-        $image->modification_date = now();     
-        $image->status            = 'Inactivo'; 
-        $image->is_active         = false;    
+        $image->modification_date = now();         
         $image->save();
-        //dd($image);
-
-        $image -> save();
 
         return response()->json([
             'success' => true,

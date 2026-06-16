@@ -18,7 +18,7 @@
                 <div class="mb-3">
                     <label for="image_url" class="form-label">Nueva imagen</label>
                     <input type="file" class="form-control @error('image_url') is-invalid @enderror" id="image_url" name="image_url" onchange="previewImage(event)">
-                    @errr('image_url')
+                    @error('image_url')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -42,7 +42,7 @@
 
     <script>
 
-        document.getElementById('modalEditar').addEventListener('show.bs.modal', function(event) {
+    document.getElementById('modalEditar').addEventListener('show.bs.modal', function(event) {
     const id = event.relatedTarget.getAttribute('data-id');
 
     fetch(`/Image_Table/${id}/edit`)
